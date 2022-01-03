@@ -16,3 +16,27 @@
   display: flex;
   justify-content: center;
 }
+
+.topbar .profile-pic {
+  width: 30px;
+  height: 30px;
+  border-radius: 100%;
+}
+
+.edit-profile-pic {
+  width: 150px;
+  height: 150px;
+  margin: 10px;
+  border-radius: 100%;
+}
+
+.sidebar-nav .user-profile > a img {
+  width: 30px;
+  height: 30px;
+  border-radius: 100%;
+  margin-right: 10px;
+}
+
+.mailbox .message-center a .mail-contnet {
+  margin-left: 10px;
+}

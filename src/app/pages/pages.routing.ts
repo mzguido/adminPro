@@ -10,6 +10,7 @@ import { ProgressComponent } from './progress/progress.component';
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
 import { PromisesComponent } from './promises/promises.component';
 import { RxjsComponent } from './rxjs/rxjs.component';
+import { ProfileComponent } from './profile/profile.component';
 
 const routes: Routes = [
   {
@@ -19,9 +20,19 @@ const routes: Routes = [
     children: [
       { path: '', component: DashboardComponent, data: { title: 'Dashboard' } },
       {
+        path: 'account-settings',
+        component: AccountSettingsComponent,
+        data: { title: 'Configuraciones' },
+      },
+      {
         path: 'graph1',
         component: Graph1Component,
         data: { title: 'Graficas' },
+      },
+      {
+        path: 'profile',
+        component: ProfileComponent,
+        data: { title: 'Perfil de usuario' },
       },
       {
         path: 'progress',
@@ -34,11 +45,6 @@ const routes: Routes = [
         data: { title: 'Pormesas' },
       },
       { path: 'rxjs', component: RxjsComponent, data: { title: 'RXJS' } },
-      {
-        path: 'account-settings',
-        component: AccountSettingsComponent,
-        data: { title: 'Configuraciones' },
-      },
     ],
   },
 ];

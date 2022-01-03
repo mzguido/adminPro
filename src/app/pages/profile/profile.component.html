@@ -1,0 +1,89 @@
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Mi Perfil</h4>
+                <h6 class="card-subtitle">Ajustes</h6>
+                <form class="form p-t-20" [formGroup]="profileForm" (ngSubmit)='updateProfile()'>
+
+                    <div class="form-group">
+                        <label for="exampleInputuname">User Name</label>
+                        <div class="input-group">
+                            <div class="input-group-addon"><i class="ti-user"></i></div>
+                            <input type="text" class="form-control" id="exampleInputuname"
+                                placeholder="Nombre de usuario" formControlName='name'>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Email address</label>
+                        <div class="input-group">
+                            <div class="input-group-addon"><i class="ti-email"></i></div>
+                            <input type="email" class="form-control" id="exampleInputEmail1"
+                                placeholder="Ingrese el email" formControlName='email' [readonly]="user.google">
+                        </div>
+                    </div>
+                    <!-- <div class="form-group">
+                        <label for="pwd1">Password</label>
+                        <div class="input-group">
+                            <div class="input-group-addon"><i class="ti-lock"></i></div>
+                            <input type="password" class="form-control" id="pwd1" placeholder="Enter email">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="pwd2">Confirm Password</label>
+                        <div class="input-group">
+                            <div class="input-group-addon"><i class="ti-lock"></i></div>
+                            <input type="password" class="form-control" id="pwd2" placeholder="Enter email">
+                        </div>
+                    </div> -->
+                    <button type="submit" class="btn btn-success btn-block waves-effect waves-light m-r-10"
+                        [disabled]="profileForm.invalid"><i class="fa
+                            fa-check"></i> Guardar</button>
+                    <!-- <button type="submit" class="btn btn-inverse waves-effect waves-light">Cancelar</button> -->
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Avatar</h4>
+                <h6 class="card-subtitle">Imagen de perfil</h6>
+
+                <div class="text-center">
+                    <img src="{{imageUrl}}" alt="profile-pic" class="edit-profile-pic">
+                </div>
+
+                <br>
+
+                <input type="file" (change)="changeImage($event.target.files[0])">
+
+                <br>
+                <br>
+
+                <button type="button" class="btn btn-success btn-block waves-effect waves-light m-r-10"
+                    [disabled]="!hasImage()" (click)="updateImage()"><i class="fa
+                    fa-check"></i> Cambiar imagen</button>
+                <!-- <button type="button" class="btn btn-inverse waves-effect waves-light">Cancelar</button> -->
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- La platinlla usa bootstrap 3 o 4 que no tiene toast -->
+<!-- <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header">
+        <img src="..." class="rounded mr-2" alt="...">
+        <strong class="mr-auto">Bootstrap</strong>
+        <small>11 mins ago</small>
+        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="toast-body">
+        Hello, world! This is a toast message.
+    </div>
+</div> -->

@@ -4,10 +4,15 @@ import { catchError, map, tap } from 'rxjs/operators';
 
 import { environment } from 'src/environments/environment';
 
-import { RegisterForm } from '../interfaces/register-form.interface';
-import { LoginForm } from '../interfaces/login-form.interface';
 import { Observable, of } from 'rxjs';
 import { Router } from '@angular/router';
+
+import {
+  LoginForm,
+  ProfileForm,
+  RegisterForm,
+} from '../interfaces/forms.interface';
+import { User } from '../models/user.model';
 
 const base_url = environment.base_url;
 declare const gapi;
@@ -17,6 +22,7 @@ declare const gapi;
 })
 export class UserService {
   public auth2: any;
+  public user: User;
 
   constructor(
     private http: HttpClient,
@@ -26,37 +32,12 @@ export class UserService {
     this.googleInit();
   }
 
-  validateToken(): Observable<boolean> {
-    const token = localStorage.getItem('token') || '';
-
-    return this.http
-      .get(`${base_url}/login/renew`, {
-        headers: { 'x-token': token },
-      })
-      .pipe(
-        tap((resp: any) => {
-          localStorage.setItem('token', token);
-        }),
-        map((resp) => true),
-        catchError((err) => of(false))
-      );
+  get token(): string {
+    return localStorage.getItem('token') || '';
   }
 
-  createUser(formData: RegisterForm) {
-    return this.http.post(`${base_url}/users`, formData).pipe(
-      tap((res: any) => {
-        localStorage.setItem('token', res.token);
-      })
-    );
-  }
-
-  // TODO: Crear y aplicar interfaces para las respuestas de las peticiones
-  login(formData: LoginForm) {
-    return this.http.post(`${base_url}/login`, formData).pipe(
-      tap((res: any) => {
-        localStorage.setItem('token', res.token);
-      })
-    );
+  get uid(): string {
+    return this.user.uid || '';
   }
 
   googleInit() {
@@ -71,6 +52,54 @@ export class UserService {
         resolve();
       });
     });
+  }
+
+  validateToken(): Observable<boolean> {
+    return this.http
+      .get(`${base_url}/login/renew`, {
+        headers: { 'x-token': this.token },
+      })
+      .pipe(
+        map((resp: any) => {
+          const { name, email, img, google, role, uid } = resp.user;
+          this.user = new User(name, email, '', img, google, role, uid);
+          // this.user.printInfo();
+          localStorage.setItem('token', this.token);
+          return true;
+        }),
+        catchError((err) => {
+          // console.log(err);
+          return of(false);
+        })
+      );
+  }
+
+  createUser(formData: RegisterForm) {
+    return this.http.post(`${base_url}/users`, formData).pipe(
+      tap((res: any) => {
+        localStorage.setItem('token', res.token);
+      })
+    );
+  }
+
+  // updateUser(formData: {name:string,email:string})
+  updateUser(formData: ProfileForm) {
+    formData = { ...formData, role: this.user.role };
+    return this.http.put(`${base_url}/users/${this.uid}`, formData, {
+      headers: { 'x-token': this.token },
+    });
+  }
+
+  // TODO: Crear y aplicar interfaces para las respuestas de las peticiones
+  login(formData: LoginForm) {
+    try {
+      return this.http.post(`${base_url}/login`, formData).pipe(
+        tap((res: any) => {
+          localStorage.setItem('token', res.token);
+        })
+      );
+    } finally {
+    }
   }
 
   loginGoogle(token) {
