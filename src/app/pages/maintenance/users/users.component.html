@@ -1,0 +1,92 @@
+<div class="row animated fadeIn fast">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+
+                <input type="text" class="form-control" placeholder="Buscar usuario" #txtSearch
+                    (keyup)="getUserByName(txtSearch.value)">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row animated fadeIn fast" *ngIf="isLoading">
+    <div class="col-12">
+        <div class="alert alert-info text-center">
+            <h4 class="alert-heading">Cargando...</h4>
+            <i class="fa fa-spin fa-refresh fa-2x"></i>
+            <p class="mb-0">Espere un momento.</p>
+        </div>
+    </div>
+</div>
+
+
+<div class="row animated fadeIn fast" *ngIf="!isLoading">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Usuarios</h4>
+                <h6 class="card-subtitle">Se encontraron <strong>{{totalUsers}}</strong> usuarios de la aplicación.</h6>
+                <div class="table-responsive table-hover">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="w100">Imagen</th>
+                                <th>Email</th>
+                                <th>Nombre</th>
+                                <th class="w140">Rol</th>
+                                <th class="w100">Autenticación</th>
+                                <th class="text-nowrap w100">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let user of users">
+                                <td style="padding: 5px;
+                                        display: flex;
+                                        justify-content:center;
+                                        align-items:center">
+                                    <div class="user-img">
+                                        <img [src]='user.imageUrl' alt="user" class="img-profile pointer"
+                                            (click)="openModal(user)">
+                                    </div>
+                                </td>
+                                <td>{{user.email}}</td>
+                                <td>{{user.name}}</td>
+                                <td><select class="form-control" [(ngModel)]="user.role" (change)='changeRole(user)'>
+                                        <option value="ADMIN_ROLE">Admin</option>
+                                        <option value="USER_ROLE">User</option>
+                                    </select></td>
+                                <td>
+                                    <span *ngIf="user.google" class='label label-danger'
+                                        style='width:70px; text-align:center'><i class="fa fa-google"></i>oogle</span>
+                                    <span *ngIf="!user.google" class='label label-info' style='width:70px'><i
+                                            class="fa fa-envelope"></i> Email</span>
+                                </td>
+
+                                <td class="text-nowrap text-center">
+                                    <a (click)="editUser(user) " data-toggle="tooltip" data-original-title="Editar"> <i
+                                            class="fa fa-pencil text-inverse m-r-10 pointer"></i> </a>
+                                    <a (click)="deleteUser(user)" data-toggle="tooltip" data-original-title="Eliminar">
+                                        <!-- *ngIf="user.uid !== userService.uid" -->
+                                        <i class="fa fa-close text-danger pointer"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div *ngIf="txtSearch.value.length == 0" style='display: flex;
+                    flex-direction: row;
+                    justify-content: center;
+                    align-items: baseline;
+                    margin-bottom: -10px;'>
+                    <button class='btn btn-secondary mx-2' (click)="changePage(-1)">Anterior</button>
+                    <p style="width:30px; text-align: center">{{(page +1)}}/{{totalPages}}</p>
+                    <button class='btn btn-secondary mx-2' (click)="changePage(1)">Siguiente</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

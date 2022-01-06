@@ -16,7 +16,7 @@ const routes: Routes = [
   // 'login'
   // 'register'
 
-  { path: '**', pathMatch: 'full', redirectTo: '/dashboard' },
+  { path: '', pathMatch: 'full', redirectTo: '/dashboard' },
   { path: '**', component: NopagefoundComponent },
 ];
 
